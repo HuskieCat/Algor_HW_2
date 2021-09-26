@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void MilesToDays(int[],int,int,int);
+void MilesToDays(int[],int,int,int, long&);
 
 int main() 
 {
@@ -12,32 +12,24 @@ int main()
   cout << "Enter race distance in miles: ";
   cin >> raceDistance;
 
+  long static numberOfDays = 0;
+
   int array [raceDistance];
-  MilesToDays(array, 0, raceDistance, raceDistance);
+  MilesToDays(array, 0, raceDistance, raceDistance, numberOfDays);
+
+  cout << "Length of training schedule: " << numberOfDays << endl;
 
   cout << "Program End\n";
 }
 
-void MilesToDays(int array[], int index, int miles, int milesLeft)
+void MilesToDays(int array[], int index, int miles, int milesLeft, long &numberOfDays)
 {
-  int static numberOfDays = 0;
-
   if(milesLeft < 0)
     return;
 
   if (milesLeft == 0)
   {
     numberOfDays++;
-    cout << numberOfDays;
-    /*cout << "Day " << numberOfDays << ": ";
-    for(int i = 0; i < index; i++)
-    {
-      if(i == index-1)  
-        cout << array[i];
-      else
-        cout << array[i] << ", ";
-    }
-    cout << endl;*/
     return;
   }
 
@@ -46,6 +38,6 @@ void MilesToDays(int array[], int index, int miles, int milesLeft)
   for(int k = prev; k <= miles; k++)
   {
     array[index] = k;
-    MilesToDays(array, index + 1, miles, milesLeft - k);
+    MilesToDays(array, index + 1, miles, milesLeft - k, numberOfDays);
   }
 }
