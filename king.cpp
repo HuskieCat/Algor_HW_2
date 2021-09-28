@@ -3,9 +3,9 @@
 
 using namespace std;
 
-void findPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths);
-void print(int **myArray, int rows, int columns);
-void fill(int **myArray, int rows, int columns);
+void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths);
+void Print(int **myArray, int rows, int columns);
+void Fill(int **myArray, int rows, int columns);
 
 int main() 
 {
@@ -25,32 +25,32 @@ int main()
         myArray[i] = new int [columns];
     }
 
-    fill(myArray, rows, columns);
-    //print(myArray, rows, columns);
+    Fill(myArray, rows, columns);
+    //Print(myArray, rows, columns);
 
-    findPaths(myArray, rows, columns, 0, 0, paths);
+    FindPaths(myArray, rows, columns, 0, 0, paths);
 
     cout << "Number of paths: " << paths << endl;;
 
     cout << "Program End\n";
 }
 
-void findPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths)
+void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths)
 {
     if(columns == cColumn)
     {
         paths++;
-        print(myArray, rows, columns);
-        fill(myArray, rows, columns);
+        Print(myArray, rows, columns);
+        Fill(myArray, rows, columns);
         return;
     }
 
     myArray[cRow][cColumn] = 1;
     cout << "Row:" << cRow << " Column:" << cColumn << endl;
-    findPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
+    FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
 }
 
-void print(int **myArray, int rows, int columns)
+void Print(int **myArray, int rows, int columns)
 {
     for(int i = 0; i < rows; i++)
     {
@@ -63,7 +63,7 @@ void print(int **myArray, int rows, int columns)
     cout << endl;
 }
 
-void fill(int **myArray, int rows, int columns)
+void Fill(int **myArray, int rows, int columns)
 {
     for(int i = 0; i < rows; i++)
     {
