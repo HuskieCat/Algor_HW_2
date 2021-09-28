@@ -1,6 +1,8 @@
 #include <iostream>
+#include <chrono>
 
 using namespace std;
+using namespace std::chrono;
 
 void MilesToDays(int[],int,int,int, long&);
 
@@ -14,15 +16,21 @@ int main()
 
   long static numberOfDays = 0;
 
-  int array [raceDistance];
-  MilesToDays(array, 0, raceDistance, raceDistance, numberOfDays);
+  int myArray [raceDistance];
+  auto start = high_resolution_clock::now();
+  MilesToDays(myArray, 0, raceDistance, raceDistance, numberOfDays);
+  auto stop = high_resolution_clock::now();
+  long duration_MS = duration_cast<milliseconds>(stop - start).count();
+  long duration_S = duration_cast<seconds>(stop - start).count();
 
   cout << "Length of training schedule: " << numberOfDays << endl;
+  cout << "Time: " << duration_MS << " ms" << endl;
+  cout << "Time: " << duration_S << " s" << endl;
 
   cout << "Program End\n";
 }
 
-void MilesToDays(int array[], int index, int miles, int milesLeft, long &numberOfDays)
+void MilesToDays(int myArray[], int index, int miles, int milesLeft, long &numberOfDays)
 {
   if(milesLeft < 0)
     return;
@@ -33,11 +41,11 @@ void MilesToDays(int array[], int index, int miles, int milesLeft, long &numberO
     return;
   }
 
-  int prev = (index == 0)? 1 : array[index-1];
+  int prev = (index == 0)? 1 : myArray[index-1];
 
   for(int k = prev; k <= miles; k++)
   {
-    array[index] = k;
-    MilesToDays(array, index + 1, miles, milesLeft - k, numberOfDays);
+    myArray[index] = k;
+    MilesToDays(myArray, index + 1, miles, milesLeft - k, numberOfDays);
   }
 }
