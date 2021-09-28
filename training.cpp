@@ -4,7 +4,7 @@
 using namespace std;
 using namespace std::chrono;
 
-void MilesToDays(int[],int,int,int, long&);
+void MilesToDays(int[],int,int,int, unsigned long long&);
 
 int main() 
 {
@@ -14,7 +14,7 @@ int main()
   cout << "Enter race distance in miles: ";
   cin >> raceDistance;
 
-  long static numberOfDays = 0;
+  unsigned long long static numberOfDays = 0;
 
   int myArray [raceDistance];
   auto start = high_resolution_clock::now();
@@ -30,7 +30,7 @@ int main()
   cout << "Program End\n";
 }
 
-void MilesToDays(int myArray[], int index, int miles, int milesLeft, long &numberOfDays)
+void MilesToDays(int myArray[], int index, int miles, int milesLeft, unsigned long long &numberOfDays)
 {
   if(milesLeft < 0)
     return;
