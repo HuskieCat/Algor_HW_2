@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths);
+void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths, bool check);
 void Print(int **myArray, int rows, int columns);
 void Fill(int **myArray, int rows, int columns);
 
@@ -28,76 +28,57 @@ int main()
     Fill(myArray, rows, columns);
     //Print(myArray, rows, columns);
 
-    FindPaths(myArray, rows, columns, 0, 0, paths);
+    FindPaths(myArray, rows, columns, 0, 0, paths, true);
 
     cout << "Number of paths: " << paths << endl;;
 
-    Print(myArray, rows, columns);
+    //Print(myArray, rows, columns);
 
     cout << "Program End\n";
 }
 
-void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths)
+void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths, bool check)
 {
+    //Goes back when currentRow is out of bounds
     if(cRow <= -1)
         return;
 
-    if(cColumn >= columns)
+    //Goes back when currentRow is out of bounds
+    if(cRow >= rows)
         return;
 
-    cout << "Row:" << cRow << " Column:" << cColumn << endl;
-    myArray[cRow][cColumn] = paths;
+    //myArray[cRow][cColumn] = paths + 1;
 
+    //Column gets to end, print
     if(cColumn == columns - 1)
     {
-        cout << "End Zone" << endl;
+        //cout << "cRow:" << cRow << " cColumn:" << cColumn << endl;
+        //Print(myArray, rows, columns);
         paths++;
-        Print(myArray, rows, columns);
-        //Fill(myArray, rows, columns);
+        //cout << "Path Count:" << paths << endl;
         return;
     }
-        
-    /*if(cRow == 0)
-        FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);*/
 
-    if(cRow >= 0 && cRow < rows - 1)
-    {   
-        FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths);
-        FindPaths(myArray, rows, columns, cRow    , cColumn + 1, paths);
-        FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
-    }
-
-    /*for(int i = -1; i < 2; i++)
+    //cout << "cRow:" << cRow << " cColumn:" << cColumn << endl;
+    
+    if(check)
     {
-        if(cRow <= -1)
-            continue;
-        
-        if(cRow == 0)
-            FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
-
-        if(cRow > 0 && cRow <= rows - 1)
+        FindPaths(myArray, rows, columns, 0, 1, paths, false);
+        FindPaths(myArray, rows, columns, 1, 1, paths, false);
+        for(int i = 1; i < rows; i++)
         {
-            if(i == -1)
-                FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths);
-            if(i == 0)
-                FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
-            if(i == 1)
-                FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
-
-            FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths);
-            FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
-            FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
+            FindPaths(myArray, rows, columns, i, 0, paths, false);
         }
-    }*/
-
-    /*if(cRow <= rows - 1)
+    }
+    else
     {
-        Print(myArray, rows, columns);
-        if(cRow == rows - 1)
-            FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
-        if(cRow < rows - 1)
-            FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
-    }*/
+        FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths, false); //Go up 1 and forward 1
+
+        FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths, false); //Go forward 1
+
+        FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths, false); //Go down 1 and forward 1
+    }
+    
 }
 
 void Print(int **myArray, int rows, int columns)
@@ -106,7 +87,7 @@ void Print(int **myArray, int rows, int columns)
     {
         for(int j = 0; j < columns; j++)
         {
-            cout << setw(4) << myArray[i][j];
+            cout << setw(7) << myArray[i][j];
         }
         cout << endl;
     }
