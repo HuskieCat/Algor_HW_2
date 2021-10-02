@@ -32,22 +32,72 @@ int main()
 
     cout << "Number of paths: " << paths << endl;;
 
+    Print(myArray, rows, columns);
+
     cout << "Program End\n";
 }
 
 void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths)
 {
-    if(columns == cColumn)
+    if(cRow <= -1)
+        return;
+
+    if(cColumn >= columns)
+        return;
+
+    cout << "Row:" << cRow << " Column:" << cColumn << endl;
+    myArray[cRow][cColumn] = paths;
+
+    if(cColumn == columns - 1)
     {
+        cout << "End Zone" << endl;
         paths++;
         Print(myArray, rows, columns);
-        Fill(myArray, rows, columns);
+        //Fill(myArray, rows, columns);
         return;
     }
+        
+    /*if(cRow == 0)
+        FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);*/
 
-    myArray[cRow][cColumn] = 1;
-    cout << "Row:" << cRow << " Column:" << cColumn << endl;
-    FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
+    if(cRow >= 0 && cRow < rows - 1)
+    {   
+        FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths);
+        FindPaths(myArray, rows, columns, cRow    , cColumn + 1, paths);
+        FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
+    }
+
+    /*for(int i = -1; i < 2; i++)
+    {
+        if(cRow <= -1)
+            continue;
+        
+        if(cRow == 0)
+            FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
+
+        if(cRow > 0 && cRow <= rows - 1)
+        {
+            if(i == -1)
+                FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths);
+            if(i == 0)
+                FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
+            if(i == 1)
+                FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
+
+            FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths);
+            FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
+            FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
+        }
+    }*/
+
+    /*if(cRow <= rows - 1)
+    {
+        Print(myArray, rows, columns);
+        if(cRow == rows - 1)
+            FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths);
+        if(cRow < rows - 1)
+            FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths);
+    }*/
 }
 
 void Print(int **myArray, int rows, int columns)
