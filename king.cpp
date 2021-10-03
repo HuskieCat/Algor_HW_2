@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths, bool check);
+unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, bool check);
 void Print(int **myArray, int rows, int columns);
 void Fill(int **myArray, int rows, int columns);
 
@@ -26,59 +26,60 @@ int main()
     }
 
     Fill(myArray, rows, columns);
-    //Print(myArray, rows, columns);
 
-    FindPaths(myArray, rows, columns, 0, 0, paths, true);
-
-    cout << "Number of paths: " << paths << endl;;
+    cout << "Number of paths: " << FindPaths(myArray, rows, columns, 0, 0, true) << endl;;
 
     //Print(myArray, rows, columns);
 
     cout << "Program End\n";
 }
 
-void FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, unsigned long long &paths, bool check)
+unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, bool check)
 {
     //Goes back when currentRow is out of bounds
     if(cRow <= -1)
-        return;
+        return 0;
 
     //Goes back when currentRow is out of bounds
     if(cRow >= rows)
-        return;
+        return 0;
 
-    //myArray[cRow][cColumn] = paths + 1;
-
-    //Column gets to end, print
+    //When at end, fill with 1
     if(cColumn == columns - 1)
     {
-        //cout << "cRow:" << cRow << " cColumn:" << cColumn << endl;
-        //Print(myArray, rows, columns);
-        paths++;
-        //cout << "Path Count:" << paths << endl;
-        return;
+        myArray[cRow][cColumn] = 1;
+        return 1;
     }
 
-    //cout << "cRow:" << cRow << " cColumn:" << cColumn << endl;
-    
+    //When its not -1 return
+    if(myArray[cRow][cColumn] != -1)
+        return myArray[cRow][cColumn];
+
+
+    //This entire section is for calculating the next one
+    unsigned long long pathsFromPoint = 0;
+
     if(check)
     {
-        FindPaths(myArray, rows, columns, 0, 1, paths, false);
-        FindPaths(myArray, rows, columns, 1, 1, paths, false);
+        //Kick starts the calculation and makes sure it goes through the rows
+        pathsFromPoint += FindPaths(myArray, rows, columns, 0, 1, false);
+        pathsFromPoint += FindPaths(myArray, rows, columns, 1, 1, false);
         for(int i = 1; i < rows; i++)
         {
-            FindPaths(myArray, rows, columns, i, 0, paths, false);
+            pathsFromPoint += FindPaths(myArray, rows, columns, i, 0, false);
         }
     }
     else
     {
-        FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, paths, false); //Go up 1 and forward 1
+        pathsFromPoint += FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, false); //Go up 1 and forward 1
 
-        FindPaths(myArray, rows, columns, cRow, cColumn + 1, paths, false); //Go forward 1
+        pathsFromPoint += FindPaths(myArray, rows, columns, cRow    , cColumn + 1, false); //Go forward 1
 
-        FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, paths, false); //Go down 1 and forward 1
+        pathsFromPoint += FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, false); //Go down 1 and forward 1
     }
-    
+
+    myArray[cRow][cColumn] = pathsFromPoint;
+    return pathsFromPoint;
 }
 
 void Print(int **myArray, int rows, int columns)
@@ -100,7 +101,7 @@ void Fill(int **myArray, int rows, int columns)
     {
         for(int j = 0; j < columns; j++)
         {
-            myArray[i][j] = 0;
+            myArray[i][j] = -1;
         }
     }
 }
