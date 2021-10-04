@@ -6,7 +6,9 @@ using namespace std::chrono;
 
 void MilesToDays(int[],int,int,int, unsigned long long&);
 void MilesToDays(int, int, int, int, int&);
+void Try2(int, int, int&);
 void Factors(int);
+void Adds(int);
 
 int main() 
 {
@@ -24,7 +26,9 @@ int main()
   //MilesToDays(myArray, 0, raceDistance, raceDistance, numberOfDays);
   //MilesToDays(raceDistance, 0, 1, numberOfDays2);
   //Factors(48);
-  MilesToDays(0, 0, raceDistance, raceDistance, numberOfDays);
+  //MilesToDays(0, 0, raceDistance, raceDistance, numberOfDays);
+  //Try2(raceDistance, 0, numberOfDays);
+  Adds(raceDistance);
 
   auto stop = high_resolution_clock::now();
   long duration_MS = duration_cast<milliseconds>(stop - start).count();
@@ -42,6 +46,9 @@ void MilesToDays(int previousNum, int index, int num, int reducedNum, int &numbe
   if(reducedNum < 0)
     return;
 
+  if(previousNum > num)
+    return;
+
   if(reducedNum == 0)
   {
     numberOfDays++;
@@ -56,6 +63,28 @@ void MilesToDays(int previousNum, int index, int num, int reducedNum, int &numbe
   }
 }
 
+void Try2(int miles, int calculation, int &numberOfDays)
+{
+  //cout << "Calc:" << calculation << endl;
+  if(calculation > miles)
+  {
+    return;
+  }
+
+  cout << calculation << ", ";
+  if(calculation == miles)
+  {
+    numberOfDays++;
+    cout << endl;
+    return;
+  }
+
+  for(int i = 1; i <= miles; i++)
+  {
+    Try2(miles, calculation += i, numberOfDays);
+  }
+}
+
 void Factors(int n)
 {
   for (int i = 1; i <= n; i++)
@@ -63,6 +92,22 @@ void Factors(int n)
 		  for (int k = j; k <= n; k++)
 			  if(i * j * k == n)
 				  cout << i << " * " << j << " * " << k << " = " << n << endl;
+}
+
+void Adds(int n)
+{
+  for (int i = 0; i <= n; i++)
+	  for(int j = i; j <= n; j++)
+		  for (int k = j; k <= n; k++)
+        for (int a = k; a <= n; a++)
+         for (int b = a; b <= n; b++)
+            if(i + j + k + a + b == n)
+              cout << i << " + " 
+                  << j << " + " 
+                  << k << " + "
+                  << a << " + "
+                  << b << " = "
+                  << n << endl;
 }
 
 /*void MilesToDays(int myArray[], int index, int miles, int milesLeft, unsigned long long &numberOfDays)
