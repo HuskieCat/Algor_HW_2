@@ -14,7 +14,7 @@ void Adds(int);
 void PrintArray(int[], int);
 int SumArray(int[], int);
 void ResetArray(int[], int, int);
-void Try4(int[], int, int previousI, int&);
+void Try4(int, int, int, int&);
 
 int main() 
 {
@@ -26,9 +26,6 @@ int main()
 
   int numberOfDays = 0;
 
-  int myArray [raceDistance];
-  ResetArray(myArray, raceDistance, 0);
-
   auto start = high_resolution_clock::now();
 
   //MilesToDays(myArray, 0, raceDistance, raceDistance, numberOfDays);
@@ -38,7 +35,7 @@ int main()
   //Try2(raceDistance, 0, numberOfDays);
   //Adds(raceDistance);
   //Try3(raceDistance, 0, 0, numberOfDays, myArray);
-  Try4(myArray, raceDistance, 0, numberOfDays);
+  Try4(raceDistance, 1, raceDistance, numberOfDays);
 
   auto stop = high_resolution_clock::now();
   long duration_MS = duration_cast<milliseconds>(stop - start).count();
@@ -74,14 +71,21 @@ void MilesToDays(int previousNum, int index, int num, int reducedNum, int &numbe
 }
 
 
-void Try4(int myArray[], int miles, int previousI, int &numberOfDays)
+void Try4(int miles, int previousI, int reduction, int &numberOfDays)
 {
-  if(miles == 0)
-    numberOfDays++;
-
-  for(int i = 1; i <= miles; i++)
+  for(int i = previousI; i <= miles; i++)
   {
+    int reduce = reduction - i;
+    if(reduce < 0)
+      return;
 
+    if(reduce == 0)
+  {
+    numberOfDays++;
+    return;
+  }
+
+    Try4(miles, i, reduction - i, numberOfDays);
   }
 }
 
