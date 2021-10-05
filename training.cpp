@@ -14,6 +14,7 @@ void Adds(int);
 void PrintArray(int[], int);
 int SumArray(int[], int);
 void ResetArray(int[], int, int);
+void Try4(int[], int, int previousI, int&);
 
 int main() 
 {
@@ -26,7 +27,7 @@ int main()
   int numberOfDays = 0;
 
   int myArray [raceDistance];
-  ResetArray(myArray, raceDistance, -1);
+  ResetArray(myArray, raceDistance, 0);
 
   auto start = high_resolution_clock::now();
 
@@ -36,7 +37,8 @@ int main()
   //MilesToDays(0, 0, raceDistance, raceDistance, numberOfDays);
   //Try2(raceDistance, 0, numberOfDays);
   //Adds(raceDistance);
-  Try3(raceDistance, 0, 0, numberOfDays, myArray);
+  //Try3(raceDistance, 0, 0, numberOfDays, myArray);
+  Try4(myArray, raceDistance, 0, numberOfDays);
 
   auto stop = high_resolution_clock::now();
   long duration_MS = duration_cast<milliseconds>(stop - start).count();
@@ -71,6 +73,18 @@ void MilesToDays(int previousNum, int index, int num, int reducedNum, int &numbe
   }
 }
 
+
+void Try4(int myArray[], int miles, int previousI, int &numberOfDays)
+{
+  if(miles == 0)
+    numberOfDays++;
+
+  for(int i = 1; i <= miles; i++)
+  {
+
+  }
+}
+
 void Try2(int miles, int calculation, int &numberOfDays)
 {
   //cout << "Calc:" << calculation << endl;
@@ -95,49 +109,64 @@ void Try2(int miles, int calculation, int &numberOfDays)
 
 void Try3(int miles, int previousLoop, int numberOfLoops, int &numberOfDays, int myArray[])
 {
+  int static maxLoops = miles;
   PrintArray(myArray, miles);
 
   if(numberOfLoops > miles)
     return;
 
-  if(SumArray(myArray, miles) == miles)
-  {
-    PrintArray(myArray, miles);
-    cout << SumArray(myArray, miles) << endl;
-    numberOfDays++;
-    ResetArray(myArray, miles, 0);
-    return;
-  }
-
   if(numberOfLoops == 0)
   {
-    for(int i = 0; i <= miles; i++)
+    for(int i = 0; i < miles; i++)
     {
       myArray[numberOfLoops] = i;
-      Try3(miles, i, ++numberOfLoops, numberOfDays, myArray);
+      for(int i = previousLoop; i <= miles; i++)
+      {
+        myArray[numberOfLoops] = i;
+        int total = SumArray(myArray, miles);
+
+        if(total > miles)
+          maxLoops--;
+
+        if(total == miles)
+        {
+          PrintArray(myArray, miles);
+          numberOfDays++;
+          ResetArray(myArray, miles, 0);
+          return;
+        }
+        else if (numberOfLoops + 1 < maxLoops)
+          Try3(miles, i, ++numberOfLoops, numberOfDays, myArray);
+      }
+      //Try3(miles, i, ++numberOfLoops, numberOfDays, myArray);
     }
   }
 
-  if(numberOfLoops < miles)
+  if(numberOfLoops < maxLoops)
   {
     for(int i = previousLoop; i <= miles; i++)
     {
       myArray[numberOfLoops] = i;
-      if(SumArray(myArray, miles) == miles)
+      int total = SumArray(myArray, miles);
+
+      if(total > miles)
+        maxLoops--;
+
+      if(total == miles)
       {
         PrintArray(myArray, miles);
-        cout << SumArray(myArray, miles) << endl;
         numberOfDays++;
         ResetArray(myArray, miles, 0);
         return;
       }
-      else
+      else if (numberOfLoops + 1 < maxLoops)
         Try3(miles, i, ++numberOfLoops, numberOfDays, myArray);
     }
   }
+  else
+    return;
 
 }
-
 void Factors(int n)
 {
   for (int i = 1; i <= n; i++)
@@ -170,7 +199,7 @@ void PrintArray(int myArray[], int size)
     if (i < size - 1)
       cout << setw(4) << myArray[i] << ", ";
     else
-      cout << setw(4) << myArray[i] << " ";
+      cout << setw(4) << myArray[i] << " = " << SumArray(myArray, size);
   }
   cout << endl;
 }

@@ -29,7 +29,7 @@ int main()
 
     cout << "Number of paths: " << FindPaths(myArray, rows, columns, 0, 0, true) << endl;;
 
-    //Print(myArray, rows, columns);
+    Print(myArray, rows, columns);
 
     cout << "Program End\n";
 }
