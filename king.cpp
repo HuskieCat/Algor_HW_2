@@ -1,9 +1,38 @@
+/*
+    Returns the number of possible paths that the king would be able to take to traverse
+    the board from the first file to the last
+
+    OUTPUTS
+        Program Start
+        Enter board size: 4 7
+        Number of paths: 1220
+        Program End
+
+        Program Start
+        Enter board size: 8 8
+        Number of paths: 11814
+        Program End
+
+        Program Start
+        Enter board size: 10 15
+        Number of paths: 28781908
+        Program End
+
+        Program Start
+        Enter board size: 20 20
+        Number of paths: 17698806798
+        Program End
+
+    Author: Bradley Henderson
+*/
+
 #include <iostream>
 #include <iomanip>
 
 using namespace std;
 
-unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, bool check);
+unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, 
+                            bool check);
 void Print(int **myArray, int rows, int columns);
 void Fill(int **myArray, int rows, int columns);
 
@@ -15,26 +44,28 @@ int main()
     cout << "Enter board size: ";
     cin >> rows >> columns;
 
-    cout << "Rows: " << rows << " Columns: " << columns << endl;
-
     unsigned long long paths = 0;
+
     int **myArray;
     myArray = new int *[rows];
     for(int i = 0; i < rows; i++)
-    {
         myArray[i] = new int [columns];
-    }
 
     Fill(myArray, rows, columns);
 
-    cout << "Number of paths: " << FindPaths(myArray, rows, columns, 0, 0, true) << endl;;
+    cout << "Number of paths: " << FindPaths(myArray, rows, columns, 0, 0, true) << endl;
 
-    Print(myArray, rows, columns);
+    //Print(myArray, rows, columns); //This is left in to see what is in the table
 
     cout << "Program End\n";
 }
 
-unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, bool check)
+/*
+    Dynamic programming function that travels the board in search of every function,
+    returns the amount to travel.
+*/
+unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int cColumn, 
+                            bool check)
 {
     //Goes back when currentRow is out of bounds
     if(cRow <= -1)
@@ -59,29 +90,29 @@ unsigned long long FindPaths(int **myArray, int rows, int columns, int cRow, int
     //This entire section is for calculating the next one
     unsigned long long pathsFromPoint = 0;
 
-    if(check)
+    if(check) //Purpose is so it wouldn't do this portion again
     {
         //Kick starts the calculation and makes sure it goes through the rows
-        pathsFromPoint += FindPaths(myArray, rows, columns, 0, 1, false);
-        pathsFromPoint += FindPaths(myArray, rows, columns, 1, 1, false);
-        for(int i = 1; i < rows; i++)
+        for(int i = 0; i < rows; i++)
         {
             pathsFromPoint += FindPaths(myArray, rows, columns, i, 0, false);
         }
     }
     else
     {
-        pathsFromPoint += FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, false); //Go up 1 and forward 1
-
-        pathsFromPoint += FindPaths(myArray, rows, columns, cRow    , cColumn + 1, false); //Go forward 1
-
-        pathsFromPoint += FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, false); //Go down 1 and forward 1
+        //Go up 1 and forward 1
+        pathsFromPoint += FindPaths(myArray, rows, columns, cRow - 1, cColumn + 1, false); 
+        //Go forward 1
+        pathsFromPoint += FindPaths(myArray, rows, columns, cRow    , cColumn + 1, false); 
+        //Go down 1 and forward 1
+        pathsFromPoint += FindPaths(myArray, rows, columns, cRow + 1, cColumn + 1, false); 
     }
 
     myArray[cRow][cColumn] = pathsFromPoint;
     return pathsFromPoint;
 }
 
+//Used to print the array
 void Print(int **myArray, int rows, int columns)
 {
     for(int i = 0; i < rows; i++)
@@ -95,6 +126,7 @@ void Print(int **myArray, int rows, int columns)
     cout << endl;
 }
 
+//Fills the array with -1
 void Fill(int **myArray, int rows, int columns)
 {
     for(int i = 0; i < rows; i++)
