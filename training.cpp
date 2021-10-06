@@ -1,3 +1,42 @@
+/*
+  Calculates how many combinations (without permutations) it would take to get the 
+  sum of a specific number.
+   
+  Promps the user for a distance in miles and gives back how many days it would take 
+  to do so.
+   
+  OUTPUTS w/ time
+      Program Start
+      Enter race distance in miles: 5
+      Length of training schedule: 7
+      Time: 0 ms
+      Time: 0 s
+      Program End
+
+      Program Start
+      Enter race distance in miles: 13
+      Length of training schedule: 101
+      Time: 0 ms
+      Time: 0 s
+      Program End
+
+      Program Start
+      Enter race distance in miles: 26
+      Length of training schedule: 2436
+      Time: 0 ms
+      Time: 0 s
+      Program End
+
+      Program Start
+      Enter race distance in miles: 100
+      Length of training schedule: 190569292
+      Time: 6464 ms
+      Time: 6 s
+      Program End 
+
+Author: Bradley Henderson
+ */ 
+
 #include <iostream>
 #include <iomanip>
 #include <chrono>
@@ -32,11 +71,16 @@ int main()
   cout << "Program End\n";
 }
 
+/*
+A recursive algorithm that takes miles, the previous itteration, last known 
+subtraction and the number of days
+*/
 void MilesToDays(int miles, int previousI, int reduction, int &numberOfDays)
 {
   for(int i = previousI; i <= miles; i++)
   {
     int reduce = reduction - i;
+
     if(reduce < 0)
       return;
 
